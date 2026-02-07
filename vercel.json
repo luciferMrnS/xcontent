@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pip install -r requirements.txt",
+  "outputDirectory": ".",
+  "routes": [
+    { "src": "/api/posts", "dest": "/api/posts.py" },
+    { "src": "/api/generate", "dest": "/api/generate.py" },
+    { "src": "/api/(.*)", "dest": "/api/$1.py" }
+  ]
+}
