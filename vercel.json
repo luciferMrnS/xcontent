@@ -1,7 +1,9 @@
 {
   "outputDirectory": ".",
-  "routes": [
-    { "src": "/api/posts", "dest": "/api/posts.py" },
-    { "src": "/api/generate", "dest": "/api/generate.py" }
-  ]
+  "functions": {
+    "api/*.py": {
+      "runtime": "python3.11",
+      "maxDuration": 30
+    }
+  }
 }

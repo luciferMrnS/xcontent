@@ -51,9 +51,16 @@ Keep it under 280 characters. No hashtags required."""
         return {'success': False, 'error': str(e)}
 
 def handler(request):
-    result = generate_content()
+    if request['method'] == 'POST':
+        result = generate_content()
+        return {
+            'statusCode': 200 if result['success'] else 500,
+            'headers': {'Content-Type': 'application/json'},
+            'body': json.dumps(result)
+        }
+    
     return {
-        'statusCode': 200 if result['success'] else 500,
+        'statusCode': 405,
         'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps(result)
+        'body': json.dumps({'error': 'Method not allowed'})
     }
