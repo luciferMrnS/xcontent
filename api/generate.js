@@ -32,8 +32,7 @@ module.exports = async (req, res) => {
 
   const geminiApiKey = process.env.GEMINI_API_KEY;
   if (!geminiApiKey) {
-    console.error('GEMINI_API_KEY not set');
-    return res.status(500).json({ success: false, error: 'GEMINI_API_KEY not set' });
+    return res.status(500).json({ success: false, error: 'GEMINI_API_KEY environment variable not set in Vercel' });
   }
 
   try {
