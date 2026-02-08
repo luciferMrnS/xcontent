@@ -1,10 +1,15 @@
-const { kv } = require('@vercel/kv');
+const { put, del, list } = require('@vercel/blob');
 
 module.exports = async (req, res) => {
   try {
-    let posts = await kv.get('posts');
-    if (!posts) {
-      posts = [];
+    const { blobs } = await list();
+    
+    let posts = [];
+    const postsBlob = blobs.find(b => b.pathname === 'posts.json');
+    
+    if (postsBlob) {
+      const response = await fetch(postsBlob.url);
+      posts = await response.json();
     }
     
     const sortedPosts = posts.sort((a, b) => new Date(b.time) - new Date(a.time));

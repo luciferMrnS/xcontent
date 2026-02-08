@@ -1,4 +1,4 @@
-const { kv } = require('@vercel/kv');
+const { put } = require('@vercel/blob');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 module.exports = async (req, res) => {
@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
 
   const geminiApiKey = process.env.GEMINI_API_KEY;
   if (!geminiApiKey) {
-    return res.status(500).json({ success: false, error: 'GEMINI_API_KEY environment variable not set in Vercel' });
+    return res.status(500).json({ success: false, error: 'GEMINI_API_KEY not set in Vercel' });
   }
 
   try {
@@ -33,12 +33,14 @@ Keep it under 280 characters. No hashtags required.`;
       generated: true
     };
 
-    let posts = await kv.get('posts');
-    if (!posts) {
-      posts = [];
-    }
+    let posts = [];
+    try {
+      const existing = await fetch('https://public.blob.vercel-storage.com/posts.json');
+      posts = await existing.json();
+    } catch (e) {}
+
     posts.push(newPost);
-    await kv.set('posts', posts);
+    await put('posts.json', JSON.stringify(posts, null, 2), { access: 'public' });
 
     res.status(200).json({ success: true, post: newPost });
   } catch (error) {
