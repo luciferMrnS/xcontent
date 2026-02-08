@@ -1,24 +1,19 @@
-const fs = require('fs');
-const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { kv } = require('@vercel/kv');
 
-const POSTS_FILE = '/tmp/posts.json';
-
-function loadPosts() {
+async function loadPosts() {
   try {
-    if (fs.existsSync(POSTS_FILE)) {
-      return JSON.parse(fs.readFileSync(POSTS_FILE, 'utf8'));
-    }
+    const posts = await kv.get('posts');
+    return posts || [];
   } catch (e) {
     console.error('Error loading posts:', e);
     return [];
   }
-  return [];
 }
 
-function savePosts(posts) {
+async function savePosts(posts) {
   try {
-    fs.writeFileSync(POSTS_FILE, JSON.stringify(posts, null, 2));
+    await kv.set('posts', posts);
   } catch (e) {
     console.error('Error saving posts:', e);
     throw e;
@@ -61,9 +56,9 @@ Keep it under 280 characters. No hashtags required.`;
     };
 
     console.log('Saving post...');
-    const posts = loadPosts();
+    const posts = await loadPosts();
     posts.push(newPost);
-    savePosts(posts);
+    await savePosts(posts);
 
     res.status(200).json({ success: true, post: newPost });
   } catch (error) {
