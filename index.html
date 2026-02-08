@@ -534,6 +534,7 @@
             try {
                 const response = await fetch('/api/posts');
                 const data = await response.json();
+                console.log('Posts data:', data);
                 allPosts = data.all_posts;
                 updateStats(data.stats);
                 renderCurrentPost(allPosts[0] || null);
@@ -675,7 +676,10 @@
 
                 if (data.success) {
                     showToast('New post generated!');
-                    await loadPosts();
+                    // Add small delay to ensure post is saved
+                    setTimeout(async () => {
+                        await loadPosts();
+                    }, 500);
                 } else {
                     showToast('Error: ' + (data.error || 'Failed to generate'));
                 }
