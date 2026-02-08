@@ -679,8 +679,16 @@
                 if (data.success) {
                     showToast('New post generated!');
                     console.log('Generated post:', data.post);
-                    // Load posts immediately after generation
-                    await loadPosts();
+                    // Use the returned post directly since storage doesn't persist
+                    if (data.post) {
+                        allPosts.unshift(data.post);
+                        updateStats({
+                            total: allPosts.length,
+                            generated: allPosts.filter(p => p.generated).length
+                        });
+                        renderCurrentPost(data.post);
+                        renderHistory(allPosts.slice(0, 10));
+                    }
                 } else {
                     showToast('Error: ' + (data.error || 'Failed to generate'));
                 }
