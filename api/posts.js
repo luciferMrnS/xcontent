@@ -1,16 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 
-const POSTS_FILE = '/tmp/posts.json';
+const POSTS_FILE = path.join(process.cwd(), 'posts.json');
 
 function loadPosts() {
   try {
     if (fs.existsSync(POSTS_FILE)) {
-      return JSON.parse(fs.readFileSync(POSTS_FILE, 'utf8'));
+      const data = fs.readFileSync(POSTS_FILE, 'utf8');
+      return JSON.parse(data);
     }
   } catch (e) {
     console.error('Error loading posts:', e);
-    return [];
   }
   return [];
 }

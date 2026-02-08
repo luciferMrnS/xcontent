@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
-const POSTS_FILE = '/tmp/posts.json';
+const POSTS_FILE = path.join(process.cwd(), 'posts.json');
 
 function loadPosts() {
   try {
