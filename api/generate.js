@@ -40,7 +40,7 @@ Keep it under 280 characters. No hashtags required.`;
     } catch (e) {}
 
     posts.push(newPost);
-    await put('posts.json', JSON.stringify(posts, null, 2), { access: 'public' });
+    await put('posts.json', JSON.stringify(posts, null, 2), { access: 'public', allowOverwrite: true });
 
     res.status(200).json({ success: true, post: newPost });
   } catch (error) {
