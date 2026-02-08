@@ -1,8 +1,12 @@
 {
   "name": "xcontent",
   "version": "1.0.0",
+  "description": "AI Post Generator",
+  "main": "index.js",
   "dependencies": {
-    "@google/generative-ai": "^0.21.0",
-    "@vercel/kv": "^3.0.0"
+    "@google/generative-ai": "^0.21.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

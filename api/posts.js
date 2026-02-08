@@ -1,12 +1,23 @@
-const { kv } = require('@vercel/kv');
+const fs = require('fs');
+const path = require('path');
 
-module.exports = async (req, res) => {
+const POSTS_FILE = path.join(process.cwd(), 'posts.json');
+
+function loadPosts() {
   try {
-    let posts = await kv.get('posts');
-    if (!posts) {
-      posts = [];
+    if (fs.existsSync(POSTS_FILE)) {
+      const data = fs.readFileSync(POSTS_FILE, 'utf8');
+      return JSON.parse(data);
     }
-    
+  } catch (e) {
+    console.error('Error loading posts:', e);
+  }
+  return [];
+}
+
+module.exports = (req, res) => {
+  try {
+    const posts = loadPosts();
     const sortedPosts = posts.sort((a, b) => new Date(b.time) - new Date(a.time));
     
     res.status(200).json({
