@@ -1,6 +1,6 @@
 {
   "outputDirectory": ".",
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.py" }
+    { "src": "/api/(.*)", "dest": "/api/$1.js" }
   ]
 }
